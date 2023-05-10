@@ -32,7 +32,8 @@ def create_video_snippet(video_file, start_time, end_time, output_dir, title):
 
 def main(timestamp_file, video_file):
     timestamps_and_titles = read_timestamps_and_titles(timestamp_file)
-    output_dir = f'output/{timestamp_file}'
+    test_name = os.path.splitext(os.path.basename(timestamp_file))[0]
+    output_dir = f'output/{test_name}'
     os.makedirs(output_dir, exist_ok=True)
 
     for i, (timestamp, title) in enumerate(timestamps_and_titles):
@@ -40,10 +41,11 @@ def main(timestamp_file, video_file):
         print(f'Titel {title}')
         play_video_at_timestamp(video_file, timestamp)
 
+        start_time = input(f'Enter the start time (default: {timestamp}): ') or timestamp
         end_time = input('Enter the end time (HH:MM:SS) where the video was stopped: ')
-        if end_time is "":
+        if end_time == "":
             continue
-        create_video_snippet(video_file, timestamp, end_time, output_dir, title)
+        create_video_snippet(video_file, start_time, end_time, output_dir, title)
         print(f'Created snippet "{title}" from {timestamp} to {end_time}')
 
 if __name__ == "__main__":
